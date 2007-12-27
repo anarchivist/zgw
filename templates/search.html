@@ -1,0 +1,8 @@
+$def with (query_string, results)
+<html>
+<head><title>Results for query '$query_string'</title>
+<h1>Results for query '$query_string'</h1>
+
+$for result in results:
+    $result.replace("\n","<br/>")
+    
