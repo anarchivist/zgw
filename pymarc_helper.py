@@ -1,5 +1,4 @@
-import web
-from PyZ3950 import zoom
+from web.net import htmlquote
 from pymarc import MARCReader, marc8_to_unicode
 
 class Serializer:
@@ -18,7 +17,7 @@ class Humanizer:
   are encoded into Unicode."""
   def humanize(self):
     h = self.__str__()
-    h = web.net.htmlquote(h)
+    h = htmlquote(h)
     h = h.replace('\n', '<br/>\n')
     return marc8_to_unicode(h)
 #
