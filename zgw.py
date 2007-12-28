@@ -1,7 +1,6 @@
-import web
+import pymarc, web
 from PyZ3950 import zoom
-from pymarc import marc8_to_unicode, MARCReader
-from resultset import Serializer
+from pymarc_helper import Serializer, Humanizer
 
 urls = (
   '/search/(\S*)', 'search'
@@ -9,6 +8,8 @@ urls = (
 
 render = web.template.render('/home/matienzo/Desktop/python/zgw/templates')
 zoom.ResultSet.__bases__ += (Serializer,)
+pymarc.Field.__bases__ += (Humanizer,)
+pymarc.Record.__bases__ += (Humanizer,)
 
 def run_query(c, qs):
   out = []
@@ -16,7 +17,7 @@ def run_query(c, qs):
   result_set = c.search(query)
   reader = result_set.pymarc_serialize()
   for result in reader:
-    out.append(marc8_to_unicode(result.__str__().replace('\n','<br/>')))
+    out.append(result.humanize())
   return out
 
 class search:

@@ -8,4 +8,10 @@ class Serializer:
     for result in self:
       result_list.append(result.data)
     return MARCReader("".join(result_list))
+
+class Humanizer:
+  def humanize(self):
+    h = self.__str__()
+    h = h.replace('\n', '<br/>')
+    return marc8_to_unicode(h)
 #
