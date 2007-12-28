@@ -1,6 +1,6 @@
 import pymarc, web
 from PyZ3950 import zoom
-from pymarc_helper import Serializer, Humanizer
+from parsers import Parser
 
 urls = (
   '/', 'usage',
@@ -8,9 +8,9 @@ urls = (
 )
 
 render = web.template.render('/home/matienzo/Desktop/python/zgw/templates')
-zoom.ResultSet.__bases__ += (Serializer,)
-pymarc.Field.__bases__ += (Humanizer,)
-pymarc.Record.__bases__ += (Humanizer,)
+zoom.ResultSet.__bases__ += (Parser,)
+pymarc.Field.__bases__ += (Parser,)
+pymarc.Record.__bases__ += (Parser,)
 
 def run_query(c, qs):
   out = []
