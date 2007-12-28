@@ -1,11 +1,12 @@
 $def with (query_string, results, total)
 <html>
-<head><title>Results for query '$query_string'</title>
+<head><title>Results for query: $query_string</title>
 <body>
-<h1>Results for query '$query_string'</h1>
-<strong>$total results found</strong>
+<h1>$total results for query <em>$query_string</em></h1>
 
 $for result in results:
+    $#the colon is necessary as we are passing in raw HTML. sanitation
+    $#has been done already, so there are (probably) no security issues.
     <p>$:result</p>
     
 </body>

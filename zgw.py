@@ -3,7 +3,7 @@ from PyZ3950 import zoom
 from pymarc_helper import Serializer, Humanizer
 
 urls = (
-  '/search/(\S*)', 'search'
+  '/search/(.*)', 'search'
 )
 
 render = web.template.render('/home/matienzo/Desktop/python/zgw/templates')

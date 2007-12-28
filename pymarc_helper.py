@@ -1,3 +1,4 @@
+import web
 from PyZ3950 import zoom
 from pymarc import MARCReader, marc8_to_unicode
 
@@ -10,8 +11,14 @@ class Serializer:
     return MARCReader("".join(result_list))
 
 class Humanizer:
+  """Humanizes a pymarc.Field or pymarc.Record object.
+  
+  Uses the string methods of pymarc to generate MARCBreaker format data.
+  Newlines are prettified into line break tags, and then the ANSEL characters
+  are encoded into Unicode."""
   def humanize(self):
     h = self.__str__()
-    h = h.replace('\n', '<br/>')
+    h = web.net.htmlquote(h)
+    h = h.replace('\n', '<br/>\n')
     return marc8_to_unicode(h)
 #
