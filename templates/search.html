@@ -1,8 +1,5 @@
 $def with (query_string, results, total)
-<html>
-<head><title>Results for query: $query_string</title>
-<body>
-<h1>$total results for query <em>$query_string</em></h1>
+<b>$total results</b>
 
 $for result in results:
     $#the colon is necessary as we are passing in raw HTML. sanitation
