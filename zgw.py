@@ -3,6 +3,7 @@ from PyZ3950 import zoom
 from pymarc_helper import Serializer, Humanizer
 
 urls = (
+  '/', 'usage',
   '/search/(.*)', 'search'
 )
 
@@ -33,6 +34,10 @@ class search:
     results = run_query(zconn, query_string)
     print render.search(query_string=query_string, results=results, total=len(results))
     zconn.close()
+
+class usage:
+  def GET(self):
+    print render.usage()
 
 web.webapi.internalerror = web.debugerror
 if __name__ == '__main__': web.run(urls, globals())
