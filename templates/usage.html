@@ -5,9 +5,14 @@
   <body>
     <h1>zgw.py: a lightweight z39.50 web gateway</h1>
     <h2>usage:</h2>
-    <p>use the following syntax:<br/>
-      http://localhost:8080/search/[queryterm]<br/>
-      e.g. <a href='http://localhost:8080/search/au="van rossum, guido"'>http://localhost:8080/search/au="van rossum, guido"</a>
+    <dl>
+      <dt>searching</dt>
+      <dd>http://localhost:8080/search/&lt;queryterm&gt;<br/>
+        e.g. <a href='http://localhost:8080/search/au="van rossum, guido"'>http://localhost:8080/search/au="van rossum, guido"</a></dd><br/>
+      <dt>validation of z39.50 uris</dt>
+      <dd>http://localhost:8080/validate/&lt;uri&gt;<br/>
+        e.g. <a href="http://localhost:8080/validate/z39.50s://z3950.loc.gov:7090/VOYAGER">http://localhost:8080/validate/z39.50s://z3950.loc.gov:7090/VOYAGER</a></dd>
+    </dl>
     </p>
   </body>
 </html>
