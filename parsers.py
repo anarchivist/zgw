@@ -50,12 +50,10 @@ class Parser:
       raise URIParseError('URI scheme "z39.50r:" not yet implemented')
     else:
       raise URIParseError('%s is not a valid Z39.50 URI' % uri)
-    
   
-  def pymarc_serialize(self):
-    """Serializes a PyZ3950.zoom.ResultSet object as a pymarc.MARCReader object"""
+  def pymarc_deserialize(self):
+    """De serializes a PyZ3950.zoom.ResultSet object as a pymarc.MARCReader object"""
     result_list = []
     for result in self:
       result_list.append(result.data)
     return MARCReader("".join(result_list))
-    

@@ -29,7 +29,7 @@ def run_query(server, qs):
   out = []
   query = zoom.Query('CCL', qs)
   result_set = conn.search(query)
-  reader = result_set.pymarc_serialize()
+  reader = result_set.pymarc_deserialize()
   conn.close()
   for result in reader:
     out.append(result.humanize())
@@ -41,12 +41,6 @@ class search:
     print render.base(server=server['host'], query_string=query_string)
     results = run_query(server, query_string)
     print render.search(query_string=query_string, results=results, total=len(results))
-  
-  #def POST(self):
-    #query_string = web.input()
-    #print render.base(server=server['host'], query_string=query_string)
-    #results = run_query(server, query_string)
-    #print render.search(query_string=query_string, results=results, total=len(results))
 
 class usage:
   """web.py class to display usage information"""
@@ -57,10 +51,6 @@ class validate:
   """web.py class to validate Z39.50 URIs"""
   def GET(self, uri):
     print Parser().parse_uri(uri)
-    
-  #def POST(self):
-    #print Parser().parse_uri(web.input())
-
 
 web.webapi.internalerror = web.debugerror
 if __name__ == '__main__': web.run(urls, globals())
