@@ -18,7 +18,7 @@ server = {
 #server_uri = 'z39.50s://z3950.loc.gov:7090/VOYAGER'
 #server = Parser().parse_uri(server_uri)
 
-render = web.template.render('/home/matienzo/Desktop/python/zgw/templates')
+render = web.template.render()
 zoom.ResultSet.__bases__ += (Parser,)
 pymarc.Field.__bases__ += (Parser,)
 pymarc.Record.__bases__ += (Parser,)
@@ -53,4 +53,4 @@ class validate:
     print Parser().parse_uri(uri)
 
 web.webapi.internalerror = web.debugerror
-if __name__ == '__main__': web.run(urls, globals())
+if __name__ == '__main__': web.run(urls, globals(), web.reloader)
