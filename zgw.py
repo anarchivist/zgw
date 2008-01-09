@@ -14,14 +14,12 @@ server = {
   'db': 'VOYAGER'
 }
 
+render = web.template.render()
+p = Parser()
+
 #commented out as this is just an example and not yet totally implemented
 #server_uri = 'z39.50s://z3950.loc.gov:7090/VOYAGER'
-#server = Parser().parse_uri(server_uri)
-
-render = web.template.render()
-zoom.ResultSet.__bases__ += (Parser,)
-pymarc.Field.__bases__ += (Parser,)
-pymarc.Record.__bases__ += (Parser,)
+#server = p.parse_uri(server_uri)
 
 def run_query(server, qs):
   """Creates Z39.50 connection, sends query, serializes and humanizes results"""
@@ -29,10 +27,10 @@ def run_query(server, qs):
   out = []
   query = zoom.Query('CCL', qs)
   result_set = conn.search(query)
-  reader = result_set.pymarc_deserialize()
+  reader = p.pymarc_deserialize(result_set)
   conn.close()
   for result in reader:
-    out.append(result.humanize())
+    out.append(p.humanize(result))
   return out
 
 class search:
@@ -50,7 +48,9 @@ class usage:
 class validate:
   """web.py class to validate Z39.50 URIs"""
   def GET(self, uri):
-    print Parser().parse_uri(uri)
+    print p.parse_uri(uri)
 
 web.webapi.internalerror = web.debugerror
-if __name__ == '__main__': web.run(urls, globals(), web.reloader)
+if __name__ == '__main__':
+  web.run(urls, globals(), web.reloader)
+
