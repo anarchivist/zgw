@@ -14,12 +14,14 @@ server = {
   'db': 'VOYAGER'
 }
 
-render = web.template.render()
-p = Parser()
-
 #commented out as this is just an example and not yet totally implemented
 #server_uri = 'z39.50s://z3950.loc.gov:7090/VOYAGER'
-#server = p.parse_uri(server_uri)
+#server = Parser().parse_uri(server_uri)
+
+render = web.template.render('/home/matienzo/Desktop/python/zgw/templates')
+zoom.ResultSet.__bases__ += (Parser,)
+pymarc.Field.__bases__ += (Parser,)
+pymarc.Record.__bases__ += (Parser,)
 
 def run_query(server, qs):
   """Creates Z39.50 connection, sends query, serializes and humanizes results"""
@@ -27,10 +29,10 @@ def run_query(server, qs):
   out = []
   query = zoom.Query('CCL', qs)
   result_set = conn.search(query)
-  reader = p.pymarc_deserialize(result_set)
+  reader = result_set.pymarc_serialize()
   conn.close()
   for result in reader:
-    out.append(p.humanize(result))
+    out.append(result.humanize())
   return out
 
 class search:
@@ -48,9 +50,7 @@ class usage:
 class validate:
   """web.py class to validate Z39.50 URIs"""
   def GET(self, uri):
-    print p.parse_uri(uri)
+    print Parser().parse_uri(uri)
 
 web.webapi.internalerror = web.debugerror
-if __name__ == '__main__':
-  web.run(urls, globals(), web.reloader)
-
+if __name__ == '__main__': web.run(urls, globals())
