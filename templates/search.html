@@ -4,7 +4,7 @@ $def with (query_string, results, total)
 $for result in results:
     $#the colon is necessary as we are passing in raw HTML. sanitation
     $#has been done already, so there are (probably) no security issues.
-    <p>$:result</p>
+    <p style="font-family: monospace;">$:result</p>
     
 </body>
 </html>

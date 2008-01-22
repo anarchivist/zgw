@@ -1,4 +1,10 @@
-import pymarc, web
+"""
+zgw.py: a lightweight Z39.50/Web gateway
+Copyright (c) 2007-2008, Mark A. Matienzo
+"""
+
+import pymarc
+import web
 from PyZ3950 import zoom
 from parsers import Parser
 
@@ -11,14 +17,15 @@ urls = (
 server = {
   'host': 'z3950.loc.gov',
   'port': 7090,
-  'db': 'VOYAGER'
+  'db': 'VOYAGER',
+  'query_language': 'CCL'
 }
 
 #commented out as this is just an example and not yet totally implemented
 #server_uri = 'z39.50s://z3950.loc.gov:7090/VOYAGER'
 #server = Parser().parse_uri(server_uri)
 
-render = web.template.render('/home/matienzo/Desktop/python/zgw/templates')
+render = web.template.render('templates/')
 zoom.ResultSet.__bases__ += (Parser,)
 pymarc.Field.__bases__ += (Parser,)
 pymarc.Record.__bases__ += (Parser,)
@@ -27,9 +34,9 @@ def run_query(server, qs):
   """Creates Z39.50 connection, sends query, serializes and humanizes results"""
   conn = zoom.Connection(server['host'], server['port'], databaseName=server['db'])
   out = []
-  query = zoom.Query('CCL', qs)
+  query = zoom.Query(server['query_language'], qs)
   result_set = conn.search(query)
-  reader = result_set.pymarc_serialize()
+  reader = result_set.pymarc_deserialize()
   conn.close()
   for result in reader:
     out.append(result.humanize())
