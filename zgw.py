@@ -8,7 +8,7 @@ import pymarc
 import web
 from PyZ3950 import zoom
 from parsers import ParseError, Parser
-from settings import ELEMENT_SET_NAME, QUERY_SYNTAX, RESULT_SYNTAX, SERVER
+from settings import SERVER
 
 urls = (
   '/', 'usage',
@@ -25,10 +25,10 @@ def run_query(server, qs):
   """Creates Z39.50 connection, sends query, parses results"""
   conn = zoom.Connection(SERVER['host'], SERVER['port'],
                          databaseName=SERVER['db'],
-                         preferredRecordSyntax=RESULT_SYNTAX,
-                         elementSetName=ELEMENT_SET_NAME)
+                         preferredRecordSyntax=SERVER['rsyntax'],
+                         elementSetName=SERVER['element_set'])
   out = []
-  query = zoom.Query(QUERY_SYNTAX, qs)
+  query = zoom.Query(SERVER['qsyntax'], qs)
   result_set = conn.search(query)
   for result in result_set:
     if result.syntax == 'USMARC':
@@ -45,8 +45,7 @@ def run_query(server, qs):
 class search:
   """web.py class for submitting a Z39.50 query and returning results"""
   def GET(self, query_string):
-    print render.base(server=SERVER, RESULT_SYNTAX=RESULT_SYNTAX,
-          QUERY_SYNTAX=QUERY_SYNTAX)
+    print render.base(server=SERVER)
     results = run_query(SERVER, query_string)
     print render.search(query_string=query_string, results=results,
                         total=len(results))
@@ -54,8 +53,7 @@ class search:
   def POST(self):
     i = web.input()
     query_string = i.query_string
-    print render.base(server=SERVER, RESULT_SYNTAX=RESULT_SYNTAX,
-                      QUERY_SYNTAX=QUERY_SYNTAX)
+    print render.base(server=SERVER)
     results = run_query(SERVER, query_string)
     print render.search(query_string=query_string, results=results,
                         total=len(results))
@@ -63,8 +61,7 @@ class search:
 class usage:
   """web.py class to display usage information"""
   def GET(self):
-    print render.base(server=SERVER, RESULT_SYNTAX=RESULT_SYNTAX,
-                      QUERY_SYNTAX=QUERY_SYNTAX)
+    print render.base(server=SERVER)
     print render.usage()
     
 web.webapi.internalerror = web.debugerror
