@@ -11,5 +11,5 @@ pymarc 1.0 or later - http://pypi.python.org/pypi/pymarc/
 PyZ3950 - http://www.panix.com/~asl2/software/PyZ3950/
 web.py - http://webpy.org/
 
-LICENSE: Revised BSD 
+LICENSE: MIT/X11
 AUTHOR: Mark A. Matienzo <mark@matienzo.org>
