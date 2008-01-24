@@ -6,7 +6,7 @@ implementation. I specifically added this as the EACC records from the Library
 of Congress can make pymarc.marc8_to_unicode fail. See
 http://www.loc.gov/z3950/lcserver.html#limt for more information.
 """
-IGNORE_UNICODE_ERRORS = False
+IGNORE_UNICODE_ERRORS = True 
 
 """
 SERVER specifies the Z39.50 server for queries. All elements of this

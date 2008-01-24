@@ -30,7 +30,8 @@ class Parser:
       return result_unicode
     except:
       if IGNORE_UNICODE_ERRORS == True:
-        return "<strong>NOTE: MARC8 to Unicode conversion failed on this record.</strong><br/>\n%s" % result
+        return "<strong>NOTE: MARC8 to Unicode conversion failed on this \
+                record.</strong><br/>\n%s" % result_html
       else:
         raise
 
