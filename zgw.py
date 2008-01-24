@@ -45,7 +45,8 @@ def run_query(server, qs):
 class search:
   """web.py class for submitting a Z39.50 query and returning results"""
   def GET(self, query_string):
-    print render.base(server=SERVER, RESULT_SYNTAX=RESULT_SYNTAX, QUERY_SYNTAX=QUERY_SYNTAX)
+    print render.base(server=SERVER, RESULT_SYNTAX=RESULT_SYNTAX,
+          QUERY_SYNTAX=QUERY_SYNTAX)
     results = run_query(SERVER, query_string)
     print render.search(query_string=query_string, results=results,
                         total=len(results))
@@ -53,7 +54,8 @@ class search:
   def POST(self):
     i = web.input()
     query_string = i.query_string
-    print render.base(server=SERVER, RESULT_SYNTAX=RESULT_SYNTAX, QUERY_SYNTAX=QUERY_SYNTAX)
+    print render.base(server=SERVER, RESULT_SYNTAX=RESULT_SYNTAX,
+                      QUERY_SYNTAX=QUERY_SYNTAX)
     results = run_query(SERVER, query_string)
     print render.search(query_string=query_string, results=results,
                         total=len(results))
@@ -61,7 +63,8 @@ class search:
 class usage:
   """web.py class to display usage information"""
   def GET(self):
-    print render.base(server=SERVER, RESULT_SYNTAX=RESULT_SYNTAX, QUERY_SYNTAX=QUERY_SYNTAX)
+    print render.base(server=SERVER, RESULT_SYNTAX=RESULT_SYNTAX,
+                      QUERY_SYNTAX=QUERY_SYNTAX)
     print render.usage()
     
 web.webapi.internalerror = web.debugerror
