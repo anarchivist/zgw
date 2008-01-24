@@ -6,58 +6,53 @@ Copyright (c) 2007-2008, Mark A. Matienzo
 import pymarc
 import web
 from PyZ3950 import zoom
-from parsers import Parser
+from parsers import ParseError, Parser
+from settings import ELEMENT_SET_NAME, QUERY_SYNTAX, RESULT_SYNTAX, SERVER
 
 urls = (
   '/', 'usage',
-  '/search/(.*)', 'search',
-  '/validate/(.*)', 'validate'
+  '/search/(.*)', 'search'
 )
-
-server = {
-  'host': 'z3950.loc.gov',
-  'port': 7090,
-  'db': 'VOYAGER',
-  'query_language': 'CCL'
-}
-
-#commented out as this is just an example and not yet totally implemented
-#server_uri = 'z39.50s://z3950.loc.gov:7090/VOYAGER'
-#server = Parser().parse_uri(server_uri)
 
 render = web.template.render('templates/')
 zoom.ResultSet.__bases__ += (Parser,)
-pymarc.Field.__bases__ += (Parser,)
 pymarc.Record.__bases__ += (Parser,)
+p = Parser()
 
 def run_query(server, qs):
-  """Creates Z39.50 connection, sends query, serializes and humanizes results"""
-  conn = zoom.Connection(server['host'], server['port'], databaseName=server['db'])
+  """Creates Z39.50 connection, sends query, parses results"""
+  conn = zoom.Connection(SERVER['host'], SERVER['port'],
+                         databaseName=SERVER['db'],
+                         preferredRecordSyntax=RESULT_SYNTAX,
+                         elementSetName=ELEMENT_SET_NAME)
   out = []
-  query = zoom.Query(server['query_language'], qs)
+  query = zoom.Query(QUERY_SYNTAX, qs)
   result_set = conn.search(query)
-  reader = result_set.pymarc_deserialize()
+  for result in result_set:
+    if result.syntax == 'USMARC':
+      r = pymarc.Record(data=result.data)   # deserialize
+      conv_record = r.to_unicode()          # serialize, encode, htmlify
+    elif result.syntax in ('SUTRS', 'XML'): # doesn't account for MARC8 text
+      conv_record = p.to_html(result.data)
+    else:
+      raise 
+    out.append(conv_record)
   conn.close()
-  for result in reader:
-    out.append(result.humanize())
   return out
 
 class search:
   """web.py class for submitting a Z39.50 query and returning results"""
   def GET(self, query_string):
-    print render.base(server=server['host'], query_string=query_string)
-    results = run_query(server, query_string)
-    print render.search(query_string=query_string, results=results, total=len(results))
+    print render.base(server=SERVER['host'], query_string=query_string)
+    results = run_query(SERVER, query_string)
+    print render.search(query_string=query_string, results=results,
+                        total=len(results))
 
 class usage:
   """web.py class to display usage information"""
   def GET(self):
     print render.usage()
     
-class validate:
-  """web.py class to validate Z39.50 URIs"""
-  def GET(self, uri):
-    print Parser().parse_uri(uri)
-
 web.webapi.internalerror = web.debugerror
-if __name__ == '__main__': web.run(urls, globals())
+if __name__ == '__main__':
+  web.run(urls, globals())
