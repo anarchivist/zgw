@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 zgw.py: a lightweight Z39.50/Web gateway
 Copyright (c) 2007-2008, Mark A. Matienzo
