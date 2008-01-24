@@ -1,5 +1,12 @@
-$def with (server, query_string)
+$def with (server, QUERY_SYNTAX, RESULT_SYNTAX)
 <html>
-<head><title>Results for query: $query_string</title>
-<body>
-<h1>Searching $server for <em>$query_string</em></h1>
+  <head>
+    <title>zgw.py</title>
+  </head>
+  <body>
+    <h1>zgw.py: a lightweight z39.50 web gateway</h1>
+    <p>currently searching database $server['db'] on $server['host']<br/>
+    query syntax: $QUERY_SYNTAX / result syntax: $RESULT_SYNTAX</p>
+    <form method="post" action="query">
+    <p><input type="text" name="query_string"/><input type="submit" value="submit"/></p>
+    </form>

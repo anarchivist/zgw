@@ -1,17 +1,8 @@
-<html>
-  <head>
-    <title>zgw.py - usage</title>
-  </head>
-  <body>
-    <h1>zgw.py: a lightweight z39.50 web gateway</h1>
-    <h2>usage (assumes defaults in settings.py):</h2>
-    <dl>
-      <dt>searching</dt>
-      <dd>http://localhost:8080/search/&lt;queryterm&gt;<br/>
-        e.g. <a href='http://localhost:8080/search/au="van rossum, guido"'>
-        http://localhost:8080/search/au="van rossum, guido"</a>
-    </dd><br/>
-    </dl>
+    <h2>usage:</h2>
+    <p>either use the form (see below for syntax) or GET your query from /search/&lt;query_string&gt;. examples (in CCL syntax):
+    <ul><li>author: <a href='search/au="van rossum, guido"'>au="van rossum, guido"</a></li>
+    <li>title: <a href='search/ti="henriette d. avram retirement program"'>ti="henriette d. avram retirement program"</a></li>
+    <li>keyword + boolean: <a href='search/zettel and wittgenstein'>zettel and wittgenstein</a></li></ul>
     </p>
   </body>
 </html>
